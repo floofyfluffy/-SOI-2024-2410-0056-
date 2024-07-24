@@ -1,8 +1,8 @@
 FindIP_1.py :
-This is able to process files found in a directory with the specified head name. It is able to process multiple files sequentially, which is great if the server running can have a 100% uptime wihtout worrying about it shutting down on its own.
+This is able to process files found in a directory with the specified head name. It is able to process multiple files sequentially, which is great if the server running can have a 100% uptime without having to worry about the server or code shutting down on its own.
 
 FindIP_2.py :
-This is able to process only a single file, which is made with the scenario if the server does not have a 100% uptime.
+This is able to process only a single file, which is made with the scenario if the server does not have a 100% uptime but is still considered reliable and will not stop running on its own.
 
 FindIP_3.py :
 Specify an amount to query
