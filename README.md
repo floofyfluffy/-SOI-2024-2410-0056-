@@ -7,5 +7,6 @@ They will be splitted into three folders, one named DataParsing , one named Mach
 Inside the folders you will be able to find the source code related to each of the folder's role and there will be a readme
 in every folder which will explain about the codes functionality.
 
-There will be a requirements.txt in each of our folders, which indicates the system and downloads required when creating and
-using a python environment, as we are using that while running our codes on the machine learning server.
+There will also be an additional folder named Requirements, in which we will input our requirements.txt for each role
+into the folder which indicates the system and downloads required when creating and using a python environment, 
+as we are using that while running our codes on the machine learning server.
