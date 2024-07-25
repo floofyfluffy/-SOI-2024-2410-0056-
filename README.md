@@ -1,5 +1,5 @@
-Project Code : "SOI-2024-2410-0056"
-Project Name : CYBERSECURITY THREAT VISUALIZATION AND PREDICTIVE ANALYSIS IN OT/ICS .
+Project Code : "SOI-2024-2410-0056"/n
+Project Name : CYBERSECURITY THREAT VISUALIZATION AND PREDICTIVE ANALYSIS IN OT/ICS ./n
 Members : Ivan Leong, Celeste Ng, Charlene Ng
 
 This github repository serves as a database where our team will keep all our source codes here for easy reference.
