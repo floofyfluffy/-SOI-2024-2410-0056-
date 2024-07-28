@@ -10,7 +10,7 @@ def clean_text(text):
         return ''.join(c for c in text if c.isprintable()).replace('\r', '').replace('\n', ' ').replace('\t', ' ')
     return text
 
-def load_existing_dataframes(file_pattern='official_part_*.csv'):
+def load_existing_dataframes(file_pattern='./official/official_part_*.csv'):
     """Load existing DataFrames from CSV files matching the pattern."""
     csv_files = sorted(
         glob.glob(file_pattern),
@@ -57,7 +57,7 @@ def append_data_to_existing_files(chunks, csv_files, num_rows_per_file):
                 
     for chunk in chunks:
         file_index += 1
-        csv_file_path = f'official_part_{file_index}.csv'
+        csv_file_path = f'./official/official_part_{file_index}.csv'
         chunk.to_csv(csv_file_path, index=False)
         print(f"Data saved to {csv_file_path}")
 
@@ -109,9 +109,7 @@ for event in data:
         if not df_expanded.empty:
             df_combined = pd.concat([df_combined, df_expanded], ignore_index=True)
     
-    # Debug: Check the structure of df_combined
-    print(f"df_combined structure for event_id {df_event['event_id'].iloc[0]}:", df_combined.columns)
-    
+    # Append event DataFrame to the list
     all_events_df.append(df_combined)
 
 # Concatenate all event DataFrames into a single DataFrame and reset index
