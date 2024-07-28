@@ -20,7 +20,6 @@ def extract_cves_from_csv(file_path):
 def extract_and_filter_cves(df):
     cve_pattern = r'CVE-\d{4}-\d{4,7}'
     cve_list = set()
-    extraction_log = []
     for index, row in df.iterrows():
         found_cves = re.findall(cve_pattern, row.to_string())
         if found_cves:
@@ -28,11 +27,7 @@ def extract_and_filter_cves(df):
             for cve in found_cves:
                 if cve not in existing_scores:
                     cve_list.add(cve)
-                    extraction_log.append({
-                        'row': index + 1,
-                        'cves': found_cves
-                    })
-    return list(cve_list), extraction_log
+    return list(cve_list)
 
 def query_epss_api(cve_list, batch_size=50):
     if not cve_list:
@@ -69,45 +64,29 @@ def format_date(date_str):
     except ValueError:
         return date_str
 
-def append_scores_to_csv_and_log(df, epss_scores, extraction_log, file_path):
-    log_entries = []  # Define the log_entries list here
-    
-    for log in extraction_log:
-        row_index = log['row'] - 1
-        for cve in log['cves']:
+def append_scores_to_csv(df, epss_scores, file_path):
+    for index, row in df.iterrows():
+        found_cves = re.findall(r'CVE-\d{4}-\d{4,7}', row.to_string())
+        for cve in found_cves:
             data = epss_scores.get(cve, {'epss': '', 'percentile': '', 'date': ''})
 
-            # Properly handle pd.NA values
-            if pd.isna(df.at[row_index, 'EPSS Scores']):
-                df.at[row_index, 'EPSS Scores'] = f"{cve}:{data['epss']}"
+            if pd.isna(df.at[index, 'EPSS Scores']):
+                df.at[index, 'EPSS Scores'] = f"{cve}:{data['epss']}"
             else:
-                df.at[row_index, 'EPSS Scores'] += f", {cve}:{data['epss']}"
+                df.at[index, 'EPSS Scores'] += f", {cve}:{data['epss']}"
 
-            if pd.isna(df.at[row_index, 'Percentiles']):
-                df.at[row_index, 'Percentiles'] = f"{cve}:{data['percentile']}"
+            if pd.isna(df.at[index, 'Percentiles']):
+                df.at[index, 'Percentiles'] = f"{cve}:{data['percentile']}"
             else:
-                df.at[row_index, 'Percentiles'] += f", {cve}:{data['percentile']}"
+                df.at[index, 'Percentiles'] += f", {cve}:{data['percentile']}"
 
-            if pd.isna(df.at[row_index, 'Dates']):
-                df.at[row_index, 'Dates'] = f"{cve}:{format_date(data['date'])}"
+            if pd.isna(df.at[index, 'Dates']):
+                df.at[index, 'Dates'] = f"{cve}:{format_date(data['date'])}"
             else:
-                df.at[row_index, 'Dates'] += f", {cve}:{format_date(data['date'])}"
-
-            log_entries.append({
-                'Filename': file_path,
-                'Row': log['row'],
-                'Column': 'CVE_Number',
-                'CVE number': cve,
-                'EPSS score': data['epss'],
-                'EPSS percentile': data['percentile'],
-                'Date': format_date(data['date'])
-            })
+                df.at[index, 'Dates'] += f", {cve}:{format_date(data['date'])}"
 
     df.to_csv(file_path, index=False)
-    log_file_path = file_path.replace('.csv', '_final_log.csv')
-    pd.DataFrame(log_entries).to_csv(log_file_path, mode='a', header=not os.path.exists(log_file_path), index=False)
-
-    print("CSV file and log updated.")
+    print("CSV file updated.")
 
 def print_summary(stats, file_path):
     print(f"Processing file: {file_path}")
@@ -120,10 +99,10 @@ def print_summary(stats, file_path):
 file_path = 'official_part_11.csv'
 original_df = extract_cves_from_csv(file_path)
 if original_df is not None:
-    cve_ids, extraction_log = extract_and_filter_cves(original_df)
+    cve_ids = extract_and_filter_cves(original_df)
     if cve_ids:
         epss_results, statistics = query_epss_api(cve_ids)
-        append_scores_to_csv_and_log(original_df, epss_results, extraction_log, file_path)
+        append_scores_to_csv(original_df, epss_results, file_path)
         print_summary(statistics, file_path)
     else:
         print("No new CVEs to query. All necessary data is already in the CSV.")
