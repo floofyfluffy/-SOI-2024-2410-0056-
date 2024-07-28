@@ -69,6 +69,6 @@ def process_single_csv_file(directory, filename, api_key):
 
 if __name__ == '__main__':
     directory = '.'
-    api_key = 'dade43fa2f184f8e93c999542ca41650'
+    api_key = '' #Input yout API Key here
     filename = 'official_part_11.csv'  # Specify the file to process
     process_single_csv_file(directory, filename, api_key)
