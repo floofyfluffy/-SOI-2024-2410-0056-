@@ -1,6 +1,5 @@
 import os
 import chardet
-import pandas as pd
 
 def detect_encoding(file_path, sample_size=10000):
     """Detect the encoding of a file."""
@@ -23,20 +22,17 @@ def check_file_encodings(directory='.'):
                     'Filename': filename,
                     'Encoding': encoding
                 })
-                print(f"Checked {filename}: {encoding}")
             except Exception as e:
                 encoding_results.append({
                     'Filename': filename,
                     'Encoding': f"Error: {str(e)}"
                 })
-                print(f"Error checking {filename}: {str(e)}")
 
-    # Output the results to a CSV file
-    output_file = os.path.join(directory, 'file_encodings.csv')
-    df = pd.DataFrame(encoding_results)
-    df.to_csv(output_file, index=False, encoding='utf-8-sig')
-    print(f"Encoding results saved to {output_file}")
+    # Output the results to the console
+    print("Encoding Results:")
+    for result in encoding_results:
+        print(f"{result['Filename']}: {result['Encoding']}")
 
 # Specify the directory you want to check
-directory_to_check = './official'  
+directory_to_check = './official'  # Change this to your desired directory
 check_file_encodings(directory_to_check)
