@@ -74,5 +74,5 @@ def process_multiple_csv_files(directory, api_key):
 
 if __name__ == '__main__':
     directory = '.'
-    api_key = 'dade43fa2f184f8e93c999542ca41650'
+    api_key = '' #Input your API Key here
     process_multiple_csv_files(directory, api_key)
