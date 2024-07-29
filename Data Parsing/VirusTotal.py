@@ -107,7 +107,7 @@ def process_multiple_csv_files(file_paths, api_key):
         print(f"Finished processing file: {file_path}\n")
 
 # Variables
-api_key = '87e467854efadba7f6f63b13708e3341af1c0c41c6ac69cb25f8543c0e1eb5c2'
+api_key = ''
 input_directory = '.'
 file_pattern = 'official_part_*.csv'
 
